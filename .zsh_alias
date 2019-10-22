@@ -9,6 +9,7 @@ alias gsp='git stash pop'
 alias gb='git --no-pager branch'
 # git checkout
 alias gc='git checkout'
+alias gcb='git checkout -b'
 alias gcma='git checkout master'
 # git commit 
 alias gct='git commit'
@@ -57,4 +58,4 @@ alias porm='poetry remove'
 alias pos='poetry show'
 alias pou='poetry update'
 # find
-alias fgrep='find ./* -type f | xargs grep'
+alias fgrep='find . -type f | xargs grep'
