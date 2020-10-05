@@ -6,50 +6,44 @@
 #
 
 # Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
+#if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+#  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+#fi
+
+# starship
+eval "$(starship init zsh)"
 
 # Customize to your needs...
 
+# settings for pyenv
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
 
-# 追加したソフトやパッケージ用のコマンドのパスを通す
-export PATH=/usr/local/bin:$PATH
-
-# zplugを導入するPATH
-# export ZPLUG_HOME=/usr/local/opt/zplug
-# source $ZPLUG_HOME/init.zsh
-
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# zsh-completionsの設定
+# zsh-completions
 autoload -U compinit && compinit -u
 
-# Add wisely, as too many plugins slow down shell startup.
+# Add wisely, astoo many plugings slow down shell startup.
 plugins=(git)
 
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
+# Aliases
+# load alias
 source ~/.zsh_alias
 
-# 文字コードの指定
+# setup encode
 export LANG=ja_JP.UTF-8
 
-# 色を使用出来るようにする
+# enable to select color
 autoload -Uz colors
 colors
 
-# 日本語ファイル名を表示可能にする
+# enable to show files in japanese
 setopt print_eight_bit
 
-# cdなしでディレクトリ移動
+# enable to move to directories without 'cd'
 setopt auto_cd
 
-# ビープ音の停止
+# disable beep sound
 setopt no_beep
-
-# ビープ音の停止(補完時)
 setopt nolistbeep
 
 # cd -<tab>で以前移動したディレクトリを表示
@@ -76,23 +70,51 @@ setopt hist_ignore_space
 setopt hist_reduce_blanks
 
 # 補完で小文字でも大文字にマッチさせる
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*'  matcher-list 'm:{a-z}={A-Z}'
 
 # zsh-cpmpletions
 if [ -e /usr/local/share/zsh-completions ]; then
     fpath=(/usr/local/share/zsh-completions $fpath)
 fi
 
-# settings for pyenv
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
+# peco's setting
+function peco-select-history() {
+  BUFFER=$(\history -n -r 1 | peco --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle clear-screen
+}
 
-# for poetry
-export PATH="$HOME/.poetry/bin:$PATH"
-poetry completions bash >> /dev/null
+zle -N peco-select-history
+bindkey '^r' peco-select-history
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/smatsuzaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/smatsuzaki/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/s-matsuzaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/s-matsuzaki/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/smatsuzaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/smatsuzaki/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/s-matsuzaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/s-matsuzaki/google-cloud-sdk/completion.zsh.inc'; fi
+
+function gcloud-activate() {
+  name="$1"
+  project="$2"
+  echo "gcloud config configurations activate \"${name}\""
+  gcloud config configurations activate "${name}"
+}
+function gx-complete() {
+  _values $(gcloud config configurations list | awk '{print $1}')
+}
+function gx() {
+  name="$1"
+  if [ -z "$name" ]; then
+    line=$(gcloud config configurations list | peco)
+    name=$(echo "${line}" | awk '{print $1}')
+  else
+    line=$(gcloud config configurations list | grep "$name")
+  fi
+  project=$(echo "${line}" | awk '{print $4}')
+  gcloud-activate "${name}" "${project}"
+}
+compdef gx-complete gx
+
+function gcloud-current() {
+    cat $HOME/.config/gcloud/active_config
+}

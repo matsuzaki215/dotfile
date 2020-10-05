@@ -2,7 +2,7 @@
 " encode setting
 "--------------------
 
-" 文字コードを指定 
+" 文字コードを指定
 set encoding=utf-8
 scriptencoding utf-8
 " 保存時の文字コード
@@ -65,9 +65,9 @@ set incsearch
 " 検索パターンに大文字小文字を区別しない
 set ignorecase
 " 検索パターンに大文字を含んでいたら大文字小文字を区別する
-set smartcase 
+set smartcase
 " 検索結果をハイライト
-set hlsearch 
+set hlsearch
 
 " ESCキー2度押しでハイライトの切り替え
 nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
@@ -79,7 +79,7 @@ nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
 " 行末の1文字先までカーソルを移動できるように
 set virtualedit=onemore
 " カーソルの左右移動で行末から次の行の行頭への移動が可能になる
-set whichwrap=b,s,h,l,<,>,[,],~ 
+set whichwrap=b,s,h,l,<,>,[,],~
 " カーソルラインをハイライト
 set cursorline
 
@@ -108,7 +108,7 @@ source $VIMRUNTIME/macros/matchit.vim
 " コマンドモードの補完
 set wildmenu
 " 保存するコマンド履歴の数
-set history=5000 
+set history=5000
 
 
 "--------------------
@@ -131,6 +131,9 @@ endif
 "--------------------
 " paste setting
 "--------------------
+
+" クリップボードへのコピーを有効化
+set clipboard=unnamed
 
 " クリップボードからのコピー時に、自動インデントが行われないようにする
 if &term =~ "xterm"
@@ -178,6 +181,10 @@ NeoBundle 'Yggdroot/indentLine'
 NeoBundle 'bronson/vim-trailing-whitespace'
 " 構文エラーチェック
 NeoBundle 'scrooloose/syntastic'
+" ファイルの階層表示
+NeoBundle 'scrooloose/nerdtree'
+" Syntax highlight: Toml
+NeoBundle 'cespare/vim-toml'
 "----------------------------------------------------------
 
 call neobundle#end()
@@ -188,6 +195,10 @@ filetype plugin indent on
 " 未インストールのVimプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定・・・・・・③
 NeoBundleCheck
 
+" Plugin settings
+" nerdtree
+" Control + e で階層を開く
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
 
 "--------------------
 " view setting
@@ -204,5 +215,4 @@ set showmatch
 
 " ステータスラインを常に表示
 set laststatus=2
-
 

@@ -1,3 +1,12 @@
+# common
+alias c='clear'
+# docker
+alias dc='docker'
+alias dcc='docker container'
+alias dce='docker exec'
+alias dci='docker image'
+alias dcr='docker run'
+alias dch='docker history'
 # git
 alias g='git'
 # git status
@@ -11,7 +20,7 @@ alias gb='git --no-pager branch'
 alias gc='git checkout'
 alias gcb='git checkout -b'
 alias gcma='git checkout master'
-# git commit 
+# git commit
 alias gct='git commit'
 alias gcm='git commit -m'
 alias gg='git grep'
@@ -37,6 +46,10 @@ alias kg='kubectl get'
 alias kd='kubectl describe'
 alias kaf='kubectl apply -f'
 alias kl='kubectl logs'
+# ls
+alias ls='ls -G'
+alias ll='ls -lG'
+alias la='ls -laG'
 # vim
 alias v='vim'
 alias vi='vim'
